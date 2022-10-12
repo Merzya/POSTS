@@ -4,15 +4,15 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 const contactRoutes = require("./routes/contact-routes");
 const postRoutes = require("./routes/post-routes");
+const postApiRoutes = require("./routes/api-post-routes");
 const createPath = require("./helpers/create-path");
 
 const app = express();
 
 app.set("view engine", "ejs");
 
-const PORT = 3000;
-const db =
-  "mongodb+srv://Merzya:Morg1509@posts.o15kwu2.mongodb.net/?retryWrites=true&w=majority"; // vstavutu stroky pidklyuchennja do bazu
+const PORT = process.env.PORT || 80;
+const db = process.env.DB_CONNECT;
 
 mongoose
   .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -39,10 +39,10 @@ app.get("/", (req, res) => {
 });
 
 app.use(postRoutes);
-
+app.use(postApiRoutes);
 app.use(contactRoutes);
 
 app.use((req, res) => {
-  const tittle = "Err Page";
-  res.status(404).render(createPath("error"), { title });
+  const title = "Err Page";
+  res.status(404).render(createPath("error"), { Title: title });
 });
